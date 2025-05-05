@@ -50,19 +50,16 @@ namespace mock.depart.Controllers.Tests
             catMock.Id = 1;
 
             //mock UserId
+            catServiceMock.Setup(s => s.Get(1)).Returns(catMock);
             catControllerMock.Setup(foo => foo.UserId).Returns("2");
 
-
             //catMock.Setup(c => c.CatOwner).Returns(new CatOwner { Id = "1"});
-
-
-            catServiceMock.Setup(s => s.Get(1)).Returns(catMock);
-
             // catServiceMock.Setup(s => s.Delete(1)).Throws(new BadRequestResult());
 
             var actionresult = catControllerMock.Object.DeleteCat(1);
             var result = actionresult.Result as BadRequestObjectResult;
             Assert.IsNotNull(result);
+            Assert.AreEqual("Cat is not yours", result.Value);
         }
 
         [TestMethod()]
